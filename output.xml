@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns3:InitSessionTokenRequest xmlns="http://ksef.mf.gov.pl/schema/gtw/svc/online/types/2021/10/01/0001" xmlns:ns2="http://ksef.mf.gov.pl/schema/gtw/svc/types/2021/10/01/0001" xmlns:ns3="http://ksef.mf.gov.pl/schema/gtw/svc/online/auth/request/2021/10/01/0001">
+    <ns3:Context>
+        <Challenge>20250619-CR-18F82BB4D4-8773643F49-12</Challenge>
+        <Identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:SubjectIdentifierByCompanyType">
+            <ns2:Identifier>9472006724</ns2:Identifier>
+        </Identifier>
+        <DocumentType/>
+        <Token>do/xt+U5wCOdeNQF45Sn+u7oYh7N0u6qxFcK8LPb0xSiD2SV3WpFi/bln99JvXzE4FcPAZpc6kmG9hO3MN73y3ANLPuhPrrZAfV4qLXPqw++/FU2yWsYynd9V1brzicRp8+Hm+OyjpakaFhqhcTEQqE3zO7nPWO3h3QdXn0dluDCvxHp8f2d8X29tu+v/sgXTIwIgScdDhnbJm9WwEElfosKoSieyZXvxM8ULgDmDz/qyiRhHq1jAc5olrIHkG4z7CL+dRmlyTqHimNxNKR7ogRyt0d49oa0vBjWnU39x5WoSBM2eC/Omi8MVIP77aWNxxuS8eeUmFrXjv7n0YQX/g==</Token>
+    </ns3:Context>
+</ns3:InitSessionTokenRequest>
