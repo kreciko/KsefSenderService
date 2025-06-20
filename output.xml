@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ns3:InitSessionTokenRequest xmlns="http://ksef.mf.gov.pl/schema/gtw/svc/online/types/2021/10/01/0001" xmlns:ns2="http://ksef.mf.gov.pl/schema/gtw/svc/types/2021/10/01/0001" xmlns:ns3="http://ksef.mf.gov.pl/schema/gtw/svc/online/auth/request/2021/10/01/0001">
     <ns3:Context>
-        <Challenge>20250619-CR-18F82BB4D4-8773643F49-12</Challenge>
+        <Challenge>20250620-CR-352A85CB18-8E49CE43BC-80</Challenge>
         <Identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:SubjectIdentifierByCompanyType">
             <ns2:Identifier>9472006724</ns2:Identifier>
         </Identifier>
-        <DocumentType/>
-        <Token>do/xt+U5wCOdeNQF45Sn+u7oYh7N0u6qxFcK8LPb0xSiD2SV3WpFi/bln99JvXzE4FcPAZpc6kmG9hO3MN73y3ANLPuhPrrZAfV4qLXPqw++/FU2yWsYynd9V1brzicRp8+Hm+OyjpakaFhqhcTEQqE3zO7nPWO3h3QdXn0dluDCvxHp8f2d8X29tu+v/sgXTIwIgScdDhnbJm9WwEElfosKoSieyZXvxM8ULgDmDz/qyiRhHq1jAc5olrIHkG4z7CL+dRmlyTqHimNxNKR7ogRyt0d49oa0vBjWnU39x5WoSBM2eC/Omi8MVIP77aWNxxuS8eeUmFrXjv7n0YQX/g==</Token>
+        <DocumentType>
+            <ns2:Service>KSeF</ns2:Service>
+            <ns2:FormCode>
+                <ns2:SystemCode>FA (2)</ns2:SystemCode>
+                <ns2:SchemaVersion>1-0E</ns2:SchemaVersion>
+                <ns2:TargetNamespace>http://crd.gov.pl/wzor/2023/06/29/12648/</ns2:TargetNamespace>
+                <ns2:Value>FA</ns2:Value>
+            </ns2:FormCode>
+        </DocumentType>
+        <Token>AmlmoG0cKvurWgiMXCn2sxFfdH+39fpqrCNfdvXBCYyWYX35JaiXrJVblX5hhRDW56o4guhlmFK1rYmWYziJOf8nVRU8PZWn4CqXYpKUVd/LbZ4lTmdbCtLFOEhXruuUt2yc045BLJB04nemIOxAyUQngYgwm2bOZrgIVYMQ/hPy2yYByQzYUx7Mu7sm2pWZopmYHbXtEZXoYiqRP8SKA8NFcSWnrI7MjBx8eTsZWHudAQEw/NzmncDD4bQEmLqLRGGL8591ko115zy/yjHZA8rBmgvOoxLl40uN3YviyiGmjouZVDoSI6IKD9UDwlMlAwk808wQbjl+VEvYfNZrGA==</Token>
     </ns3:Context>
 </ns3:InitSessionTokenRequest>
