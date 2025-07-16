@@ -1,5 +1,8 @@
 package pl.spinsoft.ksef.ksefsenderservice.configuration
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,11 +20,12 @@ import javax.crypto.SecretKey
 @ConfigurationProperties(prefix = "spinsoft.ksef.application")
 class Configuration {
     var hotfolder: String = ""
+    var nip: String = ""
     var api: Api = Api()
 
     class Api {
         var url: String = ""
-        var key: String = ""
+        var authToken: String = ""
     }
 
     @Bean
@@ -42,5 +46,11 @@ class Configuration {
 
     }
 
+//    @Bean
+//    fun objectMapper(): ObjectMapper {
+//        return ObjectMapper()
+//            .registerModule(JavaTimeModule())
+//            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+//    }
 
 }

@@ -1,76 +1,113 @@
 package pl.spinsoft.ksef.ksefsenderservice.rest
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import org.springframework.core.io.FileSystemResource
-import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
-import pl.spinsoft.ksef.ksefsenderservice.model.request.GenericRequestBody
-import pl.spinsoft.ksef.ksefsenderservice.model.response.GenericResponseBody
+
 import java.io.File
 import kotlin.reflect.KClass
 
+
+
 @Component()
-class KsefRestClient{
+final class KsefRestClient{
 
     val client: RestClient = RestClient.builder().build()
-    val mapper: ObjectMapper = jacksonObjectMapper()
+    val mapper: ObjectMapper = ObjectMapper().findAndRegisterModules()
 
 
-    fun <T : GenericRequestBody, Z : GenericResponseBody>
-            postRequestSync(requestMetaData: KsefRequestData, payloadObj : T, responseBodyClass: KClass<Z>) : Z? {
+    inline fun <reified T,reified Z : Any>
+            dynamicRequestJson(requestMethod: (RestClient) -> RestClient.RequestBodyUriSpec, requestMetaData: KsefRequestData, payloadObj : T, responseBodyClass: KClass<Z>) : Z? {
         var result: Z? = null
         var bodyJson: String = mapper.writeValueAsString(payloadObj)
-        client
-            .post()
+            result = requestMethod(client)
             .uri(requestMetaData.url)
-            .contentType(requestMetaData.contentType)
-            .accept(requestMetaData.accept)
+            .headers {
+                headers ->
+                requestMetaData.headers.forEach {
+                    key, values -> values.forEach { value -> headers.add(key, value) }
+                }
+             }
             .body(bodyJson)
-            .exchange { request, response ->
-                val status: HttpStatusCode = response.statusCode
-                if (status.is2xxSuccessful) {
-                    println("POST succeeded: ${status}")
-                    val bodyStr = response.body?.readAllBytes()?.decodeToString()
-                    //result = response.body
-                    result = mapper.readValue(bodyStr, responseBodyClass.java)
-                    println("Response body: $bodyStr")
-
-                } else {
-                    println("POST failed with status: ${status}")
-                    throw RuntimeException("POST failed with status: $status")
-                }
-            }
+            .retrieveAndMap(responseBodyClass, "${T::class.java} POST request failed")
 
         return result
     }
 
-    fun
-            postRequestSyncOctetStream(requestMetaData: KsefRequestData, file : File/*, responseBodyClass: KClass<Z>*/) : ByteArray? {
-        var result: ByteArray? = null
+    fun<Z : Any>
+            postRequestOctetStream(requestMetaData: KsefRequestData, file : File, responseBodyClass: KClass<Z>) : Z? {
+        var result: Z? = null
+
         //var bodyJson: String = mapper.writeValueAsString(payloadObj)
-        client
+        result = client
             .post()
             .uri(requestMetaData.url)
-            .contentType(requestMetaData.contentType)
-            .accept(requestMetaData.accept)
-            .body(file.readBytes())
-            .exchange { request, response ->
-                val status: HttpStatusCode = response.statusCode
-                if (status.is2xxSuccessful) {
-                    println("POST succeeded: ${status}")
-                    val bodyStr = response.body?.readAllBytes()?.decodeToString()
-                    //result = response.body
-                    //result = mapper.readValue(bodyStr, responseBodyClass.java)
-                    println("Response body: $bodyStr")
-
-                } else {
-                    println("POST failed with status: ${status}")
-                    throw RuntimeException("POST failed with status: $status")
+            .headers {
+                headers ->
+                requestMetaData.headers.forEach {
+                        key, values -> values.forEach { value -> headers.add(key, value) }
                 }
             }
+            .body(file.readBytes())
+            .retrieveAndMap(responseBodyClass, "OCTET-STREAM POST request failed")
 
         return result
+
     }
+
+    // Wariant ze zwróceniem surowego tekstu
+    fun <T>
+            dynamicRequestJson(requestMetaData: KsefRequestData, payloadObj: T): String? {
+        val bodyJson: String = mapper.writeValueAsString(payloadObj)
+
+        return client
+            .post()
+            .uri(requestMetaData.url)
+            .headers {
+                headers ->
+                requestMetaData.headers.forEach {
+                        key, values -> values.forEach { value -> headers.add(key, value) }
+                }
+            }
+            .body(bodyJson)
+            .retrieve()
+            .body(String::class.java)
+
+    }
+
+    // Wariant ze zwróceniem surowego tekstu
+    fun postRequestOctetStream(requestMetaData: KsefRequestData, file : File): String? {
+        return client
+            .post()
+            .uri(requestMetaData.url)
+            .headers {
+                headers ->
+                requestMetaData.headers.forEach {
+                        key, values -> values.forEach { value -> headers.add(key, value) }
+                }
+            }
+            .body(file.readBytes())
+            .retrieve()
+            .body(String::class.java)
+
+    }
+
+
+
+    // Rozszerzenie dla ułatwienia obsługi mapowania odpowiedzi
+    fun <Z : Any> RestClient.RequestBodySpec.retrieveAndMap(
+        responseBodyClass: KClass<Z>,
+        failureMessage: String
+    ): Z? {
+        return this.exchange { _, response ->
+            val status = response.statusCode
+            if (status.is2xxSuccessful) {
+                val bodyStr = response.body?.readAllBytes()?.decodeToString()
+                mapper.readValue(bodyStr, responseBodyClass.java)
+            } else {
+                throw RuntimeException("$failureMessage: $status")
+            }
+        }
+    }
+
 }

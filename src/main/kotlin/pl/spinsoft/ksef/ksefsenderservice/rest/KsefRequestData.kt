@@ -1,11 +1,9 @@
 package pl.spinsoft.ksef.ksefsenderservice.rest
 
-import org.springframework.http.MediaType
+import org.springframework.http.HttpHeaders
+
 
 open class KsefRequestData (
-    val contentType: MediaType,
-    val accept: MediaType,
-    val url: String
-
-
+    val url: String,
+    val headers: HttpHeaders
 )
